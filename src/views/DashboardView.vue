@@ -83,11 +83,26 @@ const lowStockProducts = computed(() => {
 const stockUtilization = computed(() => {
   if (!totalStock.value) return 0
 
+  const usedStock = totalStock.value - remainingStock.value
+
   return Math.round(
-    ((totalStock.value - remainingStock.value) /
-      totalStock.value) *
-      100
+    (usedStock / totalStock.value) * 100
   )
+})
+
+// =========================================================
+// STOCK CIRCLE STYLE
+// =========================================================
+
+const stockCircleStyle = computed(() => {
+  const degrees = stockUtilization.value * 3.6
+
+  return {
+    background: `conic-gradient(
+      #4f46e5 0deg ${degrees}deg,
+      #e0e7ff ${degrees}deg 360deg
+    )`
+  }
 })
 
 // =========================================================
@@ -135,6 +150,10 @@ const getInitial = name => {
   return name?.charAt(0)?.toUpperCase() || 'P'
 }
 
+// =========================================================
+// INITIAL LOAD
+// =========================================================
+
 onMounted(() => {
   fetchProducts()
 })
@@ -151,7 +170,6 @@ onMounted(() => {
       class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-indigo-900 px-6 py-10 text-white lg:px-10"
     >
 
-      <!-- Decorative background -->
       <div
         class="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl"
       ></div>
@@ -162,16 +180,22 @@ onMounted(() => {
 
       <div class="relative mx-auto max-w-[1600px]">
 
-        <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div
+          class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
+        >
 
           <div>
 
             <div
               class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-indigo-100 backdrop-blur"
             >
-              <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+
+              <span
+                class="h-2 w-2 rounded-full bg-emerald-400"
+              ></span>
 
               INVENTORY MANAGEMENT SYSTEM
+
             </div>
 
             <h1
@@ -198,7 +222,11 @@ onMounted(() => {
             <div
               class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/10"
             >
-              <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+
+              <span
+                class="h-2.5 w-2.5 rounded-full bg-emerald-400"
+              ></span>
+
             </div>
 
             <div>
@@ -264,9 +292,11 @@ onMounted(() => {
       <!-- KPI CARDS -->
       <!-- ================================================= -->
 
-      <section class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <section
+        class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4"
+      >
 
-        <!-- Products -->
+        <!-- Total Products -->
 
         <div
           class="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
@@ -310,7 +340,7 @@ onMounted(() => {
 
         </div>
 
-        <!-- Stock -->
+        <!-- Total Stock -->
 
         <div
           class="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
@@ -352,7 +382,9 @@ onMounted(() => {
 
             </div>
 
-            <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+            <div
+              class="h-2 overflow-hidden rounded-full bg-slate-100"
+            >
 
               <div
                 class="h-full rounded-full bg-violet-500 transition-all duration-700"
@@ -379,7 +411,9 @@ onMounted(() => {
                 Available
               </p>
 
-              <p class="mt-3 text-4xl font-black text-emerald-600">
+              <p
+                class="mt-3 text-4xl font-black text-emerald-600"
+              >
                 {{ loading ? '—' : availableProducts }}
               </p>
 
@@ -395,9 +429,13 @@ onMounted(() => {
 
           <div class="mt-5 flex items-center gap-2">
 
-            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span
+              class="h-2 w-2 rounded-full bg-emerald-500"
+            ></span>
 
-            <span class="text-xs font-semibold text-slate-500">
+            <span
+              class="text-xs font-semibold text-slate-500"
+            >
               Products ready for sale
             </span>
 
@@ -405,7 +443,7 @@ onMounted(() => {
 
         </div>
 
-        <!-- Out of stock -->
+        <!-- Out of Stock -->
 
         <div
           class="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
@@ -419,7 +457,9 @@ onMounted(() => {
                 Out of Stock
               </p>
 
-              <p class="mt-3 text-4xl font-black text-rose-600">
+              <p
+                class="mt-3 text-4xl font-black text-rose-600"
+              >
                 {{ loading ? '—' : outOfStockProducts }}
               </p>
 
@@ -435,9 +475,13 @@ onMounted(() => {
 
           <div class="mt-5 flex items-center gap-2">
 
-            <span class="h-2 w-2 rounded-full bg-rose-500"></span>
+            <span
+              class="h-2 w-2 rounded-full bg-rose-500"
+            ></span>
 
-            <span class="text-xs font-semibold text-slate-500">
+            <span
+              class="text-xs font-semibold text-slate-500"
+            >
               Requires attention
             </span>
 
@@ -451,7 +495,9 @@ onMounted(() => {
       <!-- SECOND ROW -->
       <!-- ================================================= -->
 
-      <section class="mt-7 grid grid-cols-1 gap-7 xl:grid-cols-3">
+      <section
+        class="mt-7 grid grid-cols-1 gap-7 xl:grid-cols-3"
+      >
 
         <!-- ================================================= -->
         <!-- QUICK ACTIONS -->
@@ -469,7 +515,9 @@ onMounted(() => {
               Shortcuts
             </p>
 
-            <h2 class="mt-2 text-xl font-black text-slate-900">
+            <h2
+              class="mt-2 text-xl font-black text-slate-900"
+            >
               Quick Actions
             </h2>
 
@@ -480,6 +528,8 @@ onMounted(() => {
           </div>
 
           <div class="space-y-3">
+
+            <!-- Add Product -->
 
             <a
               href="/products"
@@ -504,11 +554,15 @@ onMounted(() => {
 
               </div>
 
-              <span class="text-slate-300 transition group-hover:text-indigo-500">
+              <span
+                class="text-slate-300 transition group-hover:text-indigo-500"
+              >
                 →
               </span>
 
             </a>
+
+            <!-- Bulk Add -->
 
             <a
               href="/products"
@@ -533,11 +587,15 @@ onMounted(() => {
 
               </div>
 
-              <span class="text-slate-300 transition group-hover:text-violet-500">
+              <span
+                class="text-slate-300 transition group-hover:text-violet-500"
+              >
                 →
               </span>
 
             </a>
+
+            <!-- View Orders -->
 
             <a
               href="/orders"
@@ -562,7 +620,9 @@ onMounted(() => {
 
               </div>
 
-              <span class="text-slate-300 transition group-hover:text-emerald-500">
+              <span
+                class="text-slate-300 transition group-hover:text-emerald-500"
+              >
                 →
               </span>
 
@@ -588,7 +648,9 @@ onMounted(() => {
               Inventory Health
             </p>
 
-            <h2 class="mt-2 text-xl font-black text-slate-900">
+            <h2
+              class="mt-2 text-xl font-black text-slate-900"
+            >
               Stock Overview
             </h2>
 
@@ -598,53 +660,76 @@ onMounted(() => {
 
           <div class="flex items-center gap-6">
 
-            <div class="relative flex h-36 w-36 shrink-0 items-center justify-center rounded-full border-[14px] border-indigo-100">
+            <!-- FIXED CIRCULAR PROGRESS -->
+
+            <div
+              class="relative flex h-36 w-36 shrink-0 items-center justify-center rounded-full"
+              :style="stockCircleStyle"
+            >
+
+              <!-- Inner white circle -->
 
               <div
-                class="absolute inset-0 rounded-full border-[14px] border-transparent border-t-indigo-600 border-r-indigo-600"
-                :style="{
-                  transform: `rotate(${stockUtilization * 3.6}deg)`
-                }"
-              ></div>
+                class="flex h-24 w-24 items-center justify-center rounded-full bg-white"
+              >
 
-              <div class="text-center">
+                <div class="text-center">
 
-                <p class="text-3xl font-black text-slate-900">
-                  {{ stockUtilization }}%
-                </p>
+                  <p
+                    class="text-3xl font-black text-slate-900"
+                  >
+                    {{ stockUtilization }}%
+                  </p>
 
-                <p class="text-[10px] font-bold uppercase tracking-wide text-slate-400">
-                  Used
-                </p>
+                  <p
+                    class="text-[10px] font-bold uppercase tracking-wide text-slate-400"
+                  >
+                    Used
+                  </p>
+
+                </div>
 
               </div>
 
             </div>
 
+            <!-- Stock details -->
+
             <div class="flex-1 space-y-5">
+
+              <!-- Remaining -->
 
               <div>
 
                 <div class="flex justify-between">
 
-                  <span class="text-sm font-semibold text-slate-600">
+                  <span
+                    class="text-sm font-semibold text-slate-600"
+                  >
                     Remaining
                   </span>
 
-                  <span class="text-sm font-black text-slate-900">
+                  <span
+                    class="text-sm font-black text-slate-900"
+                  >
                     {{ remainingStock }}
                   </span>
 
                 </div>
 
-                <div class="mt-2 h-2 rounded-full bg-slate-100">
+                <div
+                  class="mt-2 h-2 rounded-full bg-slate-100"
+                >
 
                   <div
-                    class="h-full rounded-full bg-emerald-500"
+                    class="h-full rounded-full bg-emerald-500 transition-all duration-700"
                     :style="{
                       width:
                         totalStock > 0
-                          ? `${(remainingStock / totalStock) * 100}%`
+                          ? `${Math.min(
+                              (remainingStock / totalStock) * 100,
+                              100
+                            )}%`
                           : '0%'
                     }"
                   ></div>
@@ -653,15 +738,21 @@ onMounted(() => {
 
               </div>
 
+              <!-- Low Stock -->
+
               <div>
 
                 <div class="flex justify-between">
 
-                  <span class="text-sm font-semibold text-slate-600">
+                  <span
+                    class="text-sm font-semibold text-slate-600"
+                  >
                     Low Stock
                   </span>
 
-                  <span class="text-sm font-black text-amber-600">
+                  <span
+                    class="text-sm font-black text-amber-600"
+                  >
                     {{ lowStockProducts.length }}
                   </span>
 
@@ -669,15 +760,21 @@ onMounted(() => {
 
               </div>
 
+              <!-- Out of Stock -->
+
               <div>
 
                 <div class="flex justify-between">
 
-                  <span class="text-sm font-semibold text-slate-600">
+                  <span
+                    class="text-sm font-semibold text-slate-600"
+                  >
                     Out of Stock
                   </span>
 
-                  <span class="text-sm font-black text-rose-600">
+                  <span
+                    class="text-sm font-black text-rose-600"
+                  >
                     {{ outOfStockProducts }}
                   </span>
 
@@ -692,14 +789,16 @@ onMounted(() => {
         </div>
 
         <!-- ================================================= -->
-        <!-- LOW STOCK ALERTS -->
+        <!-- STOCK ALERTS -->
         <!-- ================================================= -->
 
         <div
           class="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"
         >
 
-          <div class="mb-6 flex items-start justify-between">
+          <div
+            class="mb-6 flex items-start justify-between"
+          >
 
             <div>
 
@@ -709,7 +808,9 @@ onMounted(() => {
                 Attention
               </p>
 
-              <h2 class="mt-2 text-xl font-black text-slate-900">
+              <h2
+                class="mt-2 text-xl font-black text-slate-900"
+              >
                 Stock Alerts
               </h2>
 
@@ -722,6 +823,8 @@ onMounted(() => {
             </div>
 
           </div>
+
+          <!-- No alerts -->
 
           <div
             v-if="lowStockProducts.length === 0"
@@ -738,11 +841,15 @@ onMounted(() => {
 
               <div>
 
-                <p class="text-sm font-bold text-emerald-800">
+                <p
+                  class="text-sm font-bold text-emerald-800"
+                >
                   Inventory looks healthy
                 </p>
 
-                <p class="mt-1 text-xs text-emerald-600">
+                <p
+                  class="mt-1 text-xs text-emerald-600"
+                >
                   No products require immediate restocking.
                 </p>
 
@@ -751,6 +858,8 @@ onMounted(() => {
             </div>
 
           </div>
+
+          <!-- Low stock products -->
 
           <div
             v-else
@@ -771,17 +880,23 @@ onMounted(() => {
 
               <div class="min-w-0 flex-1">
 
-                <p class="truncate text-sm font-bold text-slate-800">
+                <p
+                  class="truncate text-sm font-bold text-slate-800"
+                >
                   {{ product.productName }}
                 </p>
 
-                <p class="mt-1 text-xs text-slate-400">
+                <p
+                  class="mt-1 text-xs text-slate-400"
+                >
                   Only {{ product.remainingStock }} left
                 </p>
 
               </div>
 
-              <span class="text-xs font-bold text-amber-600">
+              <span
+                class="text-xs font-bold text-amber-600"
+              >
                 Low
               </span>
 
@@ -813,7 +928,9 @@ onMounted(() => {
               Catalogue
             </p>
 
-            <h2 class="mt-2 text-xl font-black text-slate-900">
+            <h2
+              class="mt-2 text-xl font-black text-slate-900"
+            >
               Recent Products
             </h2>
 
@@ -828,7 +945,11 @@ onMounted(() => {
             class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-indigo-700"
           >
             View All Products
-            <span class="ml-2">→</span>
+
+            <span class="ml-2">
+              →
+            </span>
+
           </a>
 
         </div>
@@ -844,7 +965,9 @@ onMounted(() => {
             class="mx-auto h-9 w-9 animate-spin rounded-full border-4 border-slate-200 border-t-indigo-600"
           ></div>
 
-          <p class="mt-4 text-sm font-medium text-slate-400">
+          <p
+            class="mt-4 text-sm font-medium text-slate-400"
+          >
             Loading inventory...
           </p>
 
@@ -863,23 +986,33 @@ onMounted(() => {
 
               <tr class="bg-slate-50 text-left">
 
-                <th class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                <th
+                  class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400"
+                >
                   Product
                 </th>
 
-                <th class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                <th
+                  class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400"
+                >
                   Category
                 </th>
 
-                <th class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                <th
+                  class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400"
+                >
                   Price
                 </th>
 
-                <th class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                <th
+                  class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400"
+                >
                   Stock
                 </th>
 
-                <th class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                <th
+                  class="px-7 py-4 text-xs font-bold uppercase tracking-wide text-slate-400"
+                >
                   Status
                 </th>
 
@@ -909,11 +1042,15 @@ onMounted(() => {
 
                     <div>
 
-                      <p class="font-bold text-slate-800">
+                      <p
+                        class="font-bold text-slate-800"
+                      >
                         {{ product.productName }}
                       </p>
 
-                      <p class="mt-1 text-xs text-slate-400">
+                      <p
+                        class="mt-1 text-xs text-slate-400"
+                      >
                         #{{ product.productId }}
                       </p>
 
@@ -939,7 +1076,9 @@ onMounted(() => {
 
                 <td class="px-7 py-5">
 
-                  <span class="font-bold text-slate-800">
+                  <span
+                    class="font-bold text-slate-800"
+                  >
                     ₹{{ formatPrice(product.productPrice) }}
                   </span>
 
@@ -951,19 +1090,27 @@ onMounted(() => {
 
                   <div class="w-36">
 
-                    <div class="mb-2 flex justify-between">
+                    <div
+                      class="mb-2 flex justify-between"
+                    >
 
-                      <span class="text-xs font-bold text-slate-700">
+                      <span
+                        class="text-xs font-bold text-slate-700"
+                      >
                         {{ product.remainingStock }}
                       </span>
 
-                      <span class="text-xs text-slate-400">
+                      <span
+                        class="text-xs text-slate-400"
+                      >
                         / {{ product.totalStock }}
                       </span>
 
                     </div>
 
-                    <div class="h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-slate-100"
+                    >
 
                       <div
                         :class="getStockColor(product)"
